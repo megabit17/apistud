@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        body {
+            background-color: #f3e5f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+        .btn {
+            background-color: #7b1fa2;
+        }
+        .modal {
+            max-width: 500px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h4 class="center purple-text">Student Management</h4>
+
+        <button class="btn modal-trigger" data-target="addStudentModal">Add Student</button>
+        <button class="btn" onclick="fetchStudents()">Get Student List</button>
+
+        <table class="highlight responsive-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Nationality</th>
+                    <th>City</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Gender</th>
+                    <th>Ethnic Group</th>
+                    <th>Age</th>
+                    <th>English Grade</th>
+                    <th>Math Grade</th>
+                    <th>Sciences Grade</th>
+                    <th>Language Grade</th>
+                    <th>Portfolio Rating</th>
+                    <th>Cover Letter Rating</th>
+                    <th>Reference Letter Rating</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="studentTable"></tbody>
+        </table>
+    </div>
+
+    <!-- Add Student Modal -->
+    <div id="addStudentModal" class="modal">
+        <div class="modal-content">
+            <h4>Add Student</h4>
+            <form id="addStudentForm">
+                <div class="input-field">
+                    <input type="text" id="add_name" required>
+                    <label for="add_name">Name</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="add_nationality" required>
+                    <label for="add_nationality">Nationality</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="add_city" required>
+                    <label for="add_city">City</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="add_latitude" required>
+                    <label for="add_latitude">Latitude</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="add_longitude" required>
+                    <label for="add_longitude">Longitude</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="add_gender" required>
+                    <label for="add_gender">Gender</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="add_ethnic_group" required>
+                    <label for="add_ethnic_group">Ethnic Group</label>
+                </div>
+                <div class="input-field">
+                    <input type="number" id="add_age" required>
+                    <label for="add_age">Age</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="add_english_grade" required>
+                    <label for="add_english_grade">English Grade</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="add_math_grade" required>
+                    <label for="add_math_grade">Math Grade</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="add_sciences_grade" required>
+                    <label for="add_sciences_grade">Sciences Grade</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="add_language_grade" required>
+                    <label for="add_language_grade">Language Grade</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="add_portfolio_rating" required>
+                    <label for="add_portfolio_rating">Portfolio Rating</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="add_coverletter_rating" required>
+                    <label for="add_coverletter_rating">Cover Letter Rating</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="add_refletter_rating" required>
+                    <label for="add_refletter_rating">Reference Letter Rating</label>
+                </div>
+                <button type="button" class="btn" onclick="addStudent()">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Student Modal -->
+    <div id="editStudentModal" class="modal">
+        <div class="modal-content">
+            <h4>Edit Student</h4>
+            <form id="editStudentForm">
+                <input type="hidden" id="edit_id">
+                <div class="input-field">
+                    <input type="text" id="edit_name" required>
+                    <label for="edit_name">Name</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="edit_nationality" required>
+                    <label for="edit_nationality">Nationality</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="edit_city" required>
+                    <label for="edit_city">City</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="edit_latitude" required>
+                    <label for="edit_latitude">Latitude</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="edit_longitude" required>
+                    <label for="edit_longitude">Longitude</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="edit_gender" required>
+                    <label for="edit_gender">Gender</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="edit_ethnic_group" required>
+                    <label for="edit_ethnic_group">Ethnic Group</label>
+                </div>
+                <div class="input-field">
+                    <input type="number" id="edit_age" required>
+                    <label for="edit_age">Age</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="edit_english_grade" required>
+                    <label for="edit_english_grade">English Grade</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="edit_math_grade" required>
+                    <label for="edit_math_grade">Math Grade</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="edit_sciences_grade" required>
+                    <label for="edit_sciences_grade">Sciences Grade</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="edit_language_grade" required>
+                    <label for="edit_language_grade">Language Grade</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="edit_portfolio_rating" required>
+                    <label for="edit_portfolio_rating">Portfolio Rating</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="edit_coverletter_rating" required>
+                    <label for="edit_coverletter_rating">Cover Letter Rating</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="edit_refletter_rating" required>
+                    <label for="edit_refletter_rating">Reference Letter Rating</label>
+                </div>
+                <button type="button" class="btn" onclick="updateStudent()">Update</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            M.AutoInit();
+        });
+
+        function showToast(message) {
+            M.toast({html: message, classes: 'rounded'});
+        }
+
+        function fetchStudents() {
+            fetch('/api.php')
+                .then(response => response.json())
+                .then(data => {
+                    let table = document.getElementById('studentTable');
+                    table.innerHTML = '';
+                    data.forEach(student => {
+                        table.innerHTML += `
+                            <tr>
+                                <td>${student.id}</td>
+                                <td>${student.name}</td>
+                                <td>${student.nationality}</td>
+                                <td>${student.city}</td>
+                                <td>${student.latitude}</td>
+                                <td>${student.longitude}</td>
+                                <td>${student.gender}</td>
+                                <td>${student.ethnic_group}</td>
+                                <td>${student.age}</td>
+                                <td>${student.english_grade}</td>
+                                <td>${student.math_grade}</td>
+                                <td>${student.sciences_grade}</td>
+                                <td>${student.language_grade}</td>
+                                <td>${student.portfolio_rating}</td>
+                                <td>${student.coverletter_rating}</td>
+                                <td>${student.refletter_rating}</td>
+                                <td>
+                                    <button class="btn" onclick="editStudent(${student.id})">Edit</button>
+                                    <button class="btn red" onclick="deleteStudent(${student.id})">Delete</button>
+                                </td>
+                            </tr>`;
+                    });
+                });
+        }
+
+        function addStudent() {
+            let student = {
+                name: document.getElementById('add_name').value,
+                nationality: document.getElementById('add_nationality').value,
+                city: document.getElementById('add_city').value,
+                latitude: document.getElementById('add_latitude').value,
+                longitude: document.getElementById('add_longitude').value,
+                gender: document.getElementById('add_gender').value,
+                ethnic_group: document.getElementById('add_ethnic_group').value,
+                age: document.getElementById('add_age').value,
+                english_grade: document.getElementById('add_english_grade').value,
+                math_grade: document.getElementById('add_math_grade').value,
+                sciences_grade: document.getElementById('add_sciences_grade').value,
+                language_grade: document.getElementById('add_language_grade').value,
+                portfolio_rating: document.getElementById('add_portfolio_rating').value,
+                coverletter_rating: document.getElementById('add_coverletter_rating').value,
+                refletter_rating: document.getElementById('add_refletter_rating').value
+            };
+            fetch('/api.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(student)
+            }).then(response => response.json()).then(() => {
+                fetchStudents();
+                showToast('Student added successfully');
+                M.Modal.getInstance(document.getElementById('addStudentModal')).close();
+            });
+        }
+
+        function editStudent(id) {
+            fetch(`/api.php/${id}`)
+                .then(response => response.json())
+                .then(student => {
+                    document.getElementById('edit_id').value = student.id;
+                    document.getElementById('edit_name').value = student.name;
+                    document.getElementById('edit_nationality').value = student.nationality;
+                    document.getElementById('edit_city').value = student.city;
+                    document.getElementById('edit_latitude').value = student.latitude;
+                    document.getElementById('edit_longitude').value = student.longitude;
+                    document.getElementById('edit_gender').value = student.gender;
+                    document.getElementById('edit_ethnic_group').value = student.ethnic_group;
+                    document.getElementById('edit_age').value = student.age;
+                    document.getElementById('edit_english_grade').value = student.english_grade;
+                    document.getElementById('edit_math_grade').value = student.math_grade;
+                    document.getElementById('edit_sciences_grade').value = student.sciences_grade;
+                    document.getElementById('edit_language_grade').value = student.language_grade;
+                    document.getElementById('edit_portfolio_rating').value = student.portfolio_rating;
+                    document.getElementById('edit_coverletter_rating').value = student.coverletter_rating;
+                    document.getElementById('edit_refletter_rating').value = student.refletter_rating;
+                    M.updateTextFields();
+                    M.Modal.getInstance(document.getElementById('editStudentModal')).open();
+                });
+        }
+
+        function updateStudent() {
+            let student = {
+                id: document.getElementById('edit_id').value,
+                name: document.getElementById('edit_name').value,
+                nationality: document.getElementById('edit_nationality').value,
+                city: document.getElementById('edit_city').value,
+                latitude: document.getElementById('edit_latitude').value,
+                longitude: document.getElementById('edit_longitude').value,
+                gender: document.getElementById('edit_gender').value,
+                ethnic_group: document.getElementById('edit_ethnic_group').value,
+                age: document.getElementById('edit_age').value,
+                english_grade: document.getElementById('edit_english_grade').value,
+                math_grade: document.getElementById('edit_math_grade').value,
+                sciences_grade: document.getElementById('edit_sciences_grade').value,
+                language_grade: document.getElementById('edit_language_grade').value,
+                portfolio_rating: document.getElementById('edit_portfolio_rating').value,
+                coverletter_rating: document.getElementById('edit_coverletter_rating').value,
+                refletter_rating: document.getElementById('edit_refletter_rating').value
+            };
+            fetch(`/api.php/${student.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(student)
+            }).then(response => response.json()).then(() => {
+                fetchStudents();
+                showToast('Student updated successfully');
+                M.Modal.getInstance(document.getElementById('editStudentModal')).close();
+            });
+        }
+
+        function deleteStudent(id) {
+            fetch(`/api.php/${id}`, {
+                method: 'DELETE'
+            }).then(response => response.json()).then(() => {
+                fetchStudents();
+                showToast('Student deleted successfully');
+            });
+        }
+    </script>
+</body>
+</html>
